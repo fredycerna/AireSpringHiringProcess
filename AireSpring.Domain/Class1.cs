@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AireSpring.Data
+namespace AireSpring.Domain
 {
     public class Class1
     {
