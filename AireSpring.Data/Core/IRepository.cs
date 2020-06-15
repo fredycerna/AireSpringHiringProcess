@@ -10,17 +10,15 @@ namespace AireSpring.Data.Core
     {        
         Task<T> GetByIdAsync(int id);
 
-        Task<T> GetAll();
+        Task<IEnumerable<T>> GetAllAsync();
 
-        Task<IEnumerable<T>> Findsync(Expression<Func<T, bool>> predicate);
+        Task<IEnumerable<T>> FindAsync(T entity, bool contains=false);
 
-        Task AddAsync(T entity);
-        Task AddRangeAsync(IEnumerable<T> entities);
+        Task<int> AddAsync(T entity);    
 
-        void Remove(T entity);
-        void RemoveRange(IEnumerable<T> entities);
+        Task RemoveAsync(int id);
 
-
+        Task<int> UpdateAsync(T entity);
 
     }
 }
