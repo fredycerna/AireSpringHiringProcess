@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AireSpring.Data.Core
 {
-    interface IUnitOfWork 
+  public interface IUnitOfWork 
     {
         IEmployeeRepository Employees { get; }
         void Commit();

@@ -7,7 +7,7 @@ namespace AireSpring.Domain.Models
 {
    public class EmployeeModel
     {
-        public int EmployeeId { get; set; }
+        public int Id { get; set; }
 
         [Required]
         public string FirstName { get; set; }

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,15 +22,25 @@ namespace AireSpring.Data.Core
             _tableName = tableName;
             _transaction = transaction;
         }
-               
-     
+
+
         /// <summary>
         /// Get all rows in the table
         /// </summary>
         /// <returns></returns>
-        public async Task<IEnumerable<T>> GetAllAsync()
-        {           
-            return await _connection.QueryAsync<T>($"SELECT * FROM {_tableName}", _transaction);
+        public async Task<IEnumerable<T>> GetAllAsync(CollectionParameters parameters)
+        {            
+            string sql = $"SELECT * FROM {_tableName} ";            
+            if (parameters.OrderBy != null && parameters.OrderBy.Length > 0 && typeof(T).GetFields().Count(f => f.Name.Equals(parameters.OrderBy))==1)
+                sql += " OrderBy " + parameters.OrderBy + ((parameters.Ordering == AscDec.Asc)? " ASC" : " DESC");            
+
+            if (parameters.Limit != null && parameters.Limit > 0)
+                sql += $" LIMIT {parameters.Limit} ";
+
+            if (parameters.Offset != null && parameters.Offset > 0)
+                sql += $" OFFSET {parameters.Offset}";
+
+            return await _connection.QueryAsync<T>(sql, _transaction);
         }
 
         /// <summary>

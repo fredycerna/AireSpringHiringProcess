@@ -10,7 +10,7 @@ namespace AireSpring.Data.Core
     {        
         Task<TEntity> GetByIdAsync(int id);
 
-        Task<IEnumerable<TEntity>> GetAllAsync();
+        Task<IEnumerable<TEntity>> GetAllAsync(CollectionParameters parameters);
 
         Task<IEnumerable<TEntity>> FindAsync(TEntity entity, bool contains=false);
 
