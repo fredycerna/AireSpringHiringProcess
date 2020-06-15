@@ -3,6 +3,7 @@ using AireSpring.Data.Models;
 using Dapper;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IO.Compression;
 using System.Linq.Expressions;
 using System.Security.Principal;
@@ -11,12 +12,12 @@ using System.Threading.Tasks;
 
 namespace AireSpring.Data.Repositories
 {
-    public class EmployeeRepository : Repository<Employee>, IRepository<Employee>
+    public class EmployeeRepository : Repository<Employee>, IEmployeeRepository
     {
-        
-        public EmployeeRepository(string tableName):base(tableName, "")
-        {
-            _tableName = tableName;
+        public const string TableName = "Employee";
+
+        public EmployeeRepository(IDbTransaction transaction) : base(transaction, TableName)
+        {             
         }
 
         public override async Task<int> AddAsync(Employee entity)
@@ -25,19 +26,18 @@ namespace AireSpring.Data.Repositories
                            VALUES (@Id, @LastName ,@First,@Phone,@Zip,@HireDate)";
             int result = 0;
 
-            using (var con= GetConnection())
+           
+            result = await _connection.ExecuteAsync(sql, new
             {
-                result = await con.ExecuteAsync(sql, new
-                {
                     Id= Guid.NewGuid(),
                     LastName = entity.LastName,
                     FirstName = entity.FirstName,
                     Phone = entity.Phone, 
                     Zip = entity.ZipCode, 
                     HireDate= entity.HireDate
-                });
+            }, _transaction);
                
-            }
+            
             return result;
         }
 
@@ -47,23 +47,24 @@ namespace AireSpring.Data.Repositories
 
         }
 
+      
+
         public override async Task<int> UpdateAsync(Employee entity)
         {
             string sql = "UPDATE Employee SET LastName=@LastName, FirstName=@FirstName, Phone=@Phone, ZipCode=@Zip, HireDate=@HireDate WHERE EmployeeId=@Id ";
 
             int result = 0;
 
-            using (var con = GetConnection())
-            {
-                result = await con.ExecuteAsync(sql, new { 
+           
+                result = await _connection.ExecuteAsync(sql, new { 
                  LastName= entity.LastName,
                  FirstName= entity.FirstName,
                  Phone = entity.Phone, 
                  Zip= entity.ZipCode, 
                  HireDate = entity.HireDate, 
                  Id = entity.Id                
-                });
-            }
+                }, _transaction);
+           
             return result;
         }
     }

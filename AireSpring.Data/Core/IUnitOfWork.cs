@@ -1,13 +1,14 @@
-﻿using System;
+﻿using AireSpring.Data.Repositories;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace AireSpring.Data.Core
 {
-    interface IUnitOfWork
+    interface IUnitOfWork 
     {
-
-        Task Commit();
+        IEmployeeRepository Employees { get; }
+        void Commit();
     }
 }

@@ -11,33 +11,25 @@ namespace AireSpring.Data.Core
 {
     public abstract class Repository<T> : IRepository<T> where T: DbEntity
     {
-        protected string _tableName;
-        protected readonly string _connectionString;
+        protected IDbTransaction _transaction;
+        protected IDbConnection _connection { get { return _transaction.Connection; } }
 
-        public Repository(string tableName, string connectionString)
+        protected string _tableName;
+
+        public Repository(IDbTransaction transaction, string tableName)
         {
             _tableName = tableName;
-            _connectionString = connectionString;
+            _transaction = transaction;
         }
                
-        /// <summary>
-        /// Open a new connection
-        /// </summary>
-        /// <returns>IDbConnection</returns>
-        protected IDbConnection GetConnection() {
-            var con = new SqlConnection(_connectionString);
-            con.Open();
-            return con;
-        }
-
+     
         /// <summary>
         /// Get all rows in the table
         /// </summary>
         /// <returns></returns>
         public async Task<IEnumerable<T>> GetAllAsync()
-        {
-            using var con = GetConnection();
-            return await con.QueryAsync<T>($"SELECT * FROM {_tableName}");
+        {           
+            return await _connection.QueryAsync<T>($"SELECT * FROM {_tableName}", _transaction);
         }
 
         /// <summary>
@@ -47,10 +39,8 @@ namespace AireSpring.Data.Core
         /// <returns>Object T</returns>
         public Task<T> GetByIdAsync(int id)
         {
-            using (var con = GetConnection())
-            {
-                return con.QueryFirstOrDefaultAsync<T>($"SELECT * FROM {_tableName} WHERE Id=@ID", new { ID = id });
-            }
+          return _connection.QueryFirstOrDefaultAsync<T>($"SELECT * FROM {_tableName} WHERE Id=@ID", new { ID = id }, _transaction);
+            
         }
 
 
@@ -61,10 +51,8 @@ namespace AireSpring.Data.Core
         /// <returns>Void</returns>
         public async Task RemoveAsync(int id)
         {
-            using (var con = GetConnection())
-            {
-                await con.ExecuteAsync($"DELETE FROM {_tableName} WHERE id=@ID  ", new { ID = id });
-            }
+           await _connection.ExecuteAsync($"DELETE FROM {_tableName} WHERE id=@ID  ", new { ID = id }, _transaction);
+           
         }
 
 

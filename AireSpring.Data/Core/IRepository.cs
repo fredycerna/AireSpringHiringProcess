@@ -6,19 +6,19 @@ using System.Threading.Tasks;
 
 namespace AireSpring.Data.Core
 {
-    interface IRepository<T>
+  public interface IRepository<TEntity>
     {        
-        Task<T> GetByIdAsync(int id);
+        Task<TEntity> GetByIdAsync(int id);
 
-        Task<IEnumerable<T>> GetAllAsync();
+        Task<IEnumerable<TEntity>> GetAllAsync();
 
-        Task<IEnumerable<T>> FindAsync(T entity, bool contains=false);
+        Task<IEnumerable<TEntity>> FindAsync(TEntity entity, bool contains=false);
 
-        Task<int> AddAsync(T entity);    
+        Task<int> AddAsync(TEntity entity);    
 
         Task RemoveAsync(int id);
 
-        Task<int> UpdateAsync(T entity);
+        Task<int> UpdateAsync(TEntity entity);
 
     }
 }
