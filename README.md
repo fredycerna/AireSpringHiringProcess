@@ -1,4 +1,4 @@
-**Test Project**
+## Test Project
 C# / ASP.net (MVC or Linq is ok but if you can avoid that it would be helpful). Create a webform for data input/output 
 EmployeeID - Unique ID
 EmployeeLastName
@@ -6,9 +6,8 @@ EmployeeFirstName
 EmployeePhone formatted (XXX) XXX-XXXX
 EmployeeZip 
 HireDate formatted as MM/DD/YYYY
- Display data sorted ascending by date 
+Display data sorted ascending by date 
 Extra points – search screen where you can enter either EmployeeLastName or EmployeePhone and it returns all 6 fields
----
 
 ## Architecture
 For the solution create a project of three layers each with its own function, design patterns, and tools:
