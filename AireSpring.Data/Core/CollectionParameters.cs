@@ -11,8 +11,14 @@ namespace AireSpring.Data.Core
 
   public class CollectionParameters
     {
+        /// <summary>
+        /// Parameter to order collection asc or desc
+        /// </summary>
         public AscDec Ordering { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public string OrderBy { get; set; }
 
         public int? Limit { get; set; }

@@ -1,4 +1,5 @@
-﻿using Dapper;
+﻿using AireSpring.Data.Models;
+using Dapper;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -29,18 +30,23 @@ namespace AireSpring.Data.Core
         /// </summary>
         /// <returns></returns>
         public async Task<IEnumerable<T>> GetAllAsync(CollectionParameters parameters)
-        {            
-            string sql = $"SELECT * FROM {_tableName} ";            
-            if (parameters.OrderBy != null && parameters.OrderBy.Length > 0 && typeof(T).GetFields().Count(f => f.Name.Equals(parameters.OrderBy))==1)
-                sql += " OrderBy " + parameters.OrderBy + ((parameters.Ordering == AscDec.Asc)? " ASC" : " DESC");            
+        {   
+            string orderby = string.Empty;
+            string top = string.Empty;
+            string offset = string.Empty;
+            
+            if (parameters.OrderBy != null && parameters.OrderBy.Length > 0 && typeof(T).GetProperties().Count(f => f.Name.Equals(parameters.OrderBy))==1)
+                orderby= "ORDER BY " + parameters.OrderBy + ((parameters.Ordering == AscDec.Asc)? " ASC" : " DESC");            
 
             if (parameters.Limit != null && parameters.Limit > 0)
-                sql += $" LIMIT {parameters.Limit} ";
+                top = $"TOP({parameters.Limit})";
 
             if (parameters.Offset != null && parameters.Offset > 0)
-                sql += $" OFFSET {parameters.Offset}";
+                offset = $"OFFSET {parameters.Offset} ROWS";
 
-            return await _connection.QueryAsync<T>(sql, _transaction);
+            string sql = $"SELECT {top} * FROM {_tableName} {orderby} {offset} ";
+
+            return await _connection.QueryAsync<T>(sql,transaction:_transaction);
         }
 
         /// <summary>
@@ -54,6 +60,13 @@ namespace AireSpring.Data.Core
             
         }
 
+        public async Task<bool> Exist() {
+            return ((await _connection.QueryAsync<int>("SELECT COUNT(*) count WHERE Id=@Id ")).Single()>0);
+        }
+
+        public async Task<int> Count() {
+            return (await _connection.QueryAsync<int>("SELECT COUNT(*) count WHERE Id=@Id ")).Single();
+        }
 
         /// <summary>
         /// Remove a record by Id
@@ -65,13 +78,12 @@ namespace AireSpring.Data.Core
            await _connection.ExecuteAsync($"DELETE FROM {_tableName} WHERE id=@ID  ", new { ID = id }, _transaction);
            
         }
-
-
-        public abstract Task<int> AddAsync(T entity);
+           
+        public abstract Task<T> AddAsync(T entity);
 
         public abstract Task<int> UpdateAsync(T entity);
 
-        public abstract Task<IEnumerable<T>> FindAsync(T entity, bool contains = false);
+        public abstract Task<IEnumerable<T>> FindAsync(string search, CollectionParameters parameters);
        
 
         

@@ -23,7 +23,8 @@ namespace AireSpring.Domain.Models
         public string ZipCode { get; set; }
 
         [DataType(DataType.Date)]
-        public string HireDate { get; set; }
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
+        public DateTime HireDate { get; set; }
 
 
     }

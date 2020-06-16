@@ -12,13 +12,17 @@ namespace AireSpring.Data.Core
 
         Task<IEnumerable<TEntity>> GetAllAsync(CollectionParameters parameters);
 
-        Task<IEnumerable<TEntity>> FindAsync(TEntity entity, bool contains=false);
+        Task<IEnumerable<TEntity>> FindAsync(string search, CollectionParameters parameters);
 
-        Task<int> AddAsync(TEntity entity);    
+        Task<TEntity> AddAsync(TEntity entity);    
 
         Task RemoveAsync(int id);
 
         Task<int> UpdateAsync(TEntity entity);
+
+        Task<bool> Exist();
+
+        Task<int> Count();
 
     }
 }

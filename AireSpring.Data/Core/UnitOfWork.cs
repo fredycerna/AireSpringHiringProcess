@@ -18,7 +18,7 @@ namespace AireSpring.Data.Core
         {
             _connection = new SqlConnection(connectionString);
             _connection.Open();
-            _transaction = _connection.BeginTransaction();           
+            _transaction = _connection.BeginTransaction();                   
         }
 
 
