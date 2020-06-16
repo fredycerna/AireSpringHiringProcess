@@ -1,15 +1,14 @@
 ﻿using AireSpring.Data.Models;
 using AireSpring.Domain.Models;
 using AutoMapper;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading;
 
 namespace AireSpring.Domain.Infraestructure
 {
-  public class MappingProfile : Profile
+    public class MappingProfile : Profile
     {
+        /// <summary>
+        /// Method to map bettew Data Access Layer and Domain Layer
+        /// </summary>
         public MappingProfile()
         {
             CreateMap<Employee, EmployeeModel>();

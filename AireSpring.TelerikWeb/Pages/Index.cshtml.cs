@@ -11,7 +11,7 @@ namespace AireSpring.TelerikWeb.Pages
 {
     public class IndexModel : PageModel
     {
-       
+
         public static IList<EmployeeModel> employees;
         private readonly IEmployeeService _service;
 
@@ -25,12 +25,12 @@ namespace AireSpring.TelerikWeb.Pages
             if (employees == null)
             {
                 employees = await _service.GetEmployeeList();
-                                
+
             }
         }
 
-        public async Task<JsonResult> OnPostRead([DataSourceRequest] DataSourceRequest request)
-        {          
+        public JsonResult OnPostRead([DataSourceRequest] DataSourceRequest request)
+        {
             return new JsonResult(employees.ToDataSourceResult(request));
         }
 
@@ -41,7 +41,7 @@ namespace AireSpring.TelerikWeb.Pages
                 await _service.CreateEmployee(model);
                 employees = await _service.GetEmployeeList();
             }
-            
+
 
             return new JsonResult(new[] { model }.ToDataSourceResult(request, ModelState));
         }

@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq.Expressions;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace AireSpring.Data.Core
 {
-  public interface IRepository<TEntity>
+    public interface IRepository<TEntity>
     {        
         Task<TEntity> GetByIdAsync(int id);
 
@@ -20,7 +17,7 @@ namespace AireSpring.Data.Core
 
         Task<int> UpdateAsync(TEntity entity);
 
-        Task<bool> Exist();
+        Task<bool> Exist(int id);
 
         Task<int> Count();
 

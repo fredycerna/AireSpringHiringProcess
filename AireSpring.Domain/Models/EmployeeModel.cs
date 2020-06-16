@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
 
 namespace AireSpring.Domain.Models
 {
-   public class EmployeeModel
+    public class EmployeeModel
     {
         public int Id { get; set; }
 

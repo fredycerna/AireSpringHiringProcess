@@ -22,6 +22,11 @@ namespace AireSpring.Data.Repositories
         {             
         }
 
+        /// <summary>
+        /// Method to add a new employee
+        /// </summary>
+        /// <param name="entity">Employee</param>
+        /// <returns>Employee</returns>
         public override async Task<Employee> AddAsync(Employee entity)
         {
             string sql = @"INSERT INTO [dbo].[Employee]([LastName],[FirstName],[Phone],[ZipCode],[HireDate]) 
@@ -40,6 +45,12 @@ namespace AireSpring.Data.Repositories
             return entity;
         }
 
+        /// <summary>
+        /// Method to find a list of employees using a search option and pagination parameters. 
+        /// </summary>
+        /// <param name="search">text to compare against lastname and phone number</param>
+        /// <param name="parameters">pagination and sorting parameters</param>
+        /// <returns></returns>
         public override async Task<IEnumerable<Employee>> FindAsync(string search, CollectionParameters parameters)
         {
             string orderby = string.Empty;
@@ -57,7 +68,7 @@ namespace AireSpring.Data.Repositories
                 offset = $"OFFSET {parameters.Offset} ROWS";
 
             if (search!= null && search.Length > 0)
-                offset = $"WHERE LastName like '%{search}%' OR Phone like '%{search}%' ";
+                offset = $"WHERE LastName LIKE '%{search}%' OR Phone LIKE '%{search}%' ";
 
             string sql = $"SELECT {top} * FROM {_tableName} {where} {orderby} {offset} ";
 
@@ -65,6 +76,11 @@ namespace AireSpring.Data.Repositories
 
         }
 
+        /// <summary>
+        /// Method to update a employee
+        /// </summary>
+        /// <param name="entity">Employee</param>
+        /// <returns>1 if update the record successfully.</returns>
         public override async Task<int> UpdateAsync(Employee entity)
         {
             string sql = "UPDATE Employee SET LastName=@LastName, FirstName=@FirstName, Phone=@Phone, ZipCode=@Zip, HireDate=@HireDate WHERE Id=@Id ";
